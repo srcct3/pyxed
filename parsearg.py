@@ -26,10 +26,16 @@ def crop_parser(subparser: argparse._SubParsersAction[argparse.ArgumentParser]):
     parser = init_parser(subparser, "crop", "Crop image [--box, --center, --xy]")
     crop_group = parser.add_mutually_exclusive_group(required=True)
     crop_group.add_argument(
-        "--box", nargs=4, type=int, help="Top x, y and bottom x, y positions"
+        "--box",
+        nargs=4,
+        type=int,
+        metavar=("TX", "TY", "BX", "BY"),
+        help="Top x, y and bottom x, y positions",
     )
     crop_group.add_argument("--center", type=int, help="Center anchored crop")
-    crop_group.add_argument("--xy", nargs=2, type=int, help="Symmetric crop")
+    crop_group.add_argument(
+        "--xy", nargs=2, metavar=("X", "Y"), type=int, help="Symmetric crop"
+    )
 
 
 def flip_parser(subparser: argparse._SubParsersAction[argparse.ArgumentParser]):
