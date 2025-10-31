@@ -1,18 +1,21 @@
 from parsearg import get_parser
 from image import load_image
-from transform.resize import resize
-from transform.rotate import rotate
-from transform.crop import crop
-from transform.transpose import flip
+from ops.resize import resize
+from ops.rotate import rotate
+from ops.crop import crop
+from ops.transpose import flip
+from ops.convert import convert
+from ops.metadata import metadata
 
 
 def main():
     parser = get_parser()
     image = load_image(parser.image)
-    print(image.size)
     command = get_command(parser.command)
+    if parser.command == "metadata":
+        command(image, parser)
+        exit(0)
     image = command(image, parser)
-    print(image.size)
     image.show()
 
 
@@ -22,6 +25,8 @@ def get_command(command):
         "crop": crop,
         "rotate": rotate,
         "flip": flip,
+        "convert": convert,
+        "metadata": metadata,
     }
     return commands[command]
 

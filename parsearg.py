@@ -1,5 +1,9 @@
 import argparse
 
+from image import get_supported_format
+
+type subparser_type = argparse._SubParsersAction[argparse.ArgumentParser]
+
 
 def get_parser():
     parser = argparse.ArgumentParser(
@@ -11,6 +15,8 @@ def get_parser():
     rotate_parser(subparser)
     flip_parser(subparser)
     crop_parser(subparser)
+    convert_parser(subparser)
+    metadata_parser(subparser)
 
     parsed = parser.parse_args()
     if parsed.command == "resize":
@@ -22,7 +28,24 @@ def get_parser():
     return parsed
 
 
-def crop_parser(subparser: argparse._SubParsersAction[argparse.ArgumentParser]):
+def metadata_parser(subparser: subparser_type):
+    init_parser(subparser, "metadata", "Show image metadata")
+
+
+def convert_parser(subparser: subparser_type):
+    fmt = get_supported_format("convertable")
+    parser = init_parser(subparser, "convert", f"Convert image formats: {fmt}")
+    parser.add_argument(
+        "--fmt",
+        "-f",
+        required=True,
+        type=str.upper,
+        choices=fmt,
+        help="Format to convert to",
+    )
+
+
+def crop_parser(subparser: subparser_type):
     parser = init_parser(subparser, "crop", "Crop image [--box, --center, --xy]")
     crop_group = parser.add_mutually_exclusive_group(required=True)
     crop_group.add_argument(
@@ -38,7 +61,7 @@ def crop_parser(subparser: argparse._SubParsersAction[argparse.ArgumentParser]):
     )
 
 
-def flip_parser(subparser: argparse._SubParsersAction[argparse.ArgumentParser]):
+def flip_parser(subparser: subparser_type):
     parser = init_parser(subparser, "flip", "Flip image [-H, -V]")
     flip_group = parser.add_mutually_exclusive_group(required=True)
     flip_group.add_argument(
@@ -49,7 +72,7 @@ def flip_parser(subparser: argparse._SubParsersAction[argparse.ArgumentParser]):
     )
 
 
-def rotate_parser(subparser: argparse._SubParsersAction[argparse.ArgumentParser]):
+def rotate_parser(subparser: subparser_type):
     parser = init_parser(
         subparser, "rotate", "Rotate image [--angle, --rad, --expand(optional)]"
     )
@@ -70,7 +93,7 @@ def rotate_parser(subparser: argparse._SubParsersAction[argparse.ArgumentParser]
     )
 
 
-def resize_parser(subparser: argparse._SubParsersAction[argparse.ArgumentParser]):
+def resize_parser(subparser: subparser_type):
     parser = init_parser(
         subparser, "resize", "Resize image [--size, --scale, --relative]"
     )
@@ -99,11 +122,9 @@ def resize_parser(subparser: argparse._SubParsersAction[argparse.ArgumentParser]
 
 
 def init_parser(
-    subparser: argparse._SubParsersAction[argparse.ArgumentParser], name: str, help: str
+    subparser: subparser_type, name: str, help: str, out: str | None = None
 ):
     parser = subparser.add_parser(name, help=help)
     parser.add_argument("image", help="Path to the image")
-    parser.add_argument(
-        "--output", "-o", default=None, help="Path to save edited image"
-    )
+    parser.add_argument("--output", "-o", default=out, help="Path to save edited image")
     return parser
