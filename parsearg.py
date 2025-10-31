@@ -17,6 +17,7 @@ def get_parser():
     crop_parser(subparser)
     convert_parser(subparser)
     metadata_parser(subparser)
+    print_parser(subparser)
 
     parsed = parser.parse_args()
     if parsed.command == "resize":
@@ -26,6 +27,10 @@ def get_parser():
             parser.error("--mode can only be used with --relative")
 
     return parsed
+
+
+def print_parser(subparser: subparser_type):
+    init_parser(subparser, "print", "Print image as ascii")
 
 
 def metadata_parser(subparser: subparser_type):

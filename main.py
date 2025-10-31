@@ -5,14 +5,14 @@ from ops.rotate import rotate
 from ops.crop import crop
 from ops.transpose import flip
 from ops.convert import convert
-from ops.metadata import metadata
+from ops.metadata import metadata, ascii
 
 
 def main():
     parser = get_parser()
     image = load_image(parser.image)
     command = get_command(parser.command)
-    if parser.command == "metadata":
+    if parser.command in ["metadata", "print"]:
         command(image, parser)
         exit(0)
     image = command(image, parser)
@@ -27,6 +27,7 @@ def get_command(command):
         "flip": flip,
         "convert": convert,
         "metadata": metadata,
+        "print": ascii,
     }
     return commands[command]
 
