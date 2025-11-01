@@ -18,6 +18,7 @@ def get_parser():
     convert_parser(subparser)
     metadata_parser(subparser)
     print_parser(subparser)
+    canvas_parser(subparser)
 
     parsed = parser.parse_args()
     if parsed.command == "resize":
@@ -27,6 +28,25 @@ def get_parser():
             parser.error("--mode can only be used with --relative")
 
     return parsed
+
+
+def canvas_parser(subparser: subparser_type):
+    parser = init_parser(subparser, "canvas", "Expand image canvas")
+    parser.add_argument(
+        "--expand",
+        "-e",
+        required=True,
+        type=int,
+        help="Expand percentage",
+    )
+    parser.add_argument(
+        "--color",
+        "-c",
+        nargs=3,
+        type=int,
+        metavar=("R", "G", "B"),
+        default=(255, 255, 255),
+    )
 
 
 def print_parser(subparser: subparser_type):

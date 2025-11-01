@@ -1,6 +1,6 @@
 from parsearg import get_parser
 from image import load_image
-from ops.resize import resize
+from ops.resize import resize, canvas
 from ops.rotate import rotate
 from ops.crop import crop
 from ops.transpose import flip
@@ -28,6 +28,7 @@ def get_command(command):
         "convert": convert,
         "metadata": metadata,
         "print": ascii,
+        "canvas": canvas,
     }
     return commands[command]
 

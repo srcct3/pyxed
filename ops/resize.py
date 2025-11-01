@@ -32,6 +32,24 @@ def relative(image: Image.Image, relative_size: tuple[int, int], mode: str):
     return image
 
 
+def canvas(image: Image.Image, parser):
+    width, height = image.size
+    percentage = clamp(parser.expand, 0, 100) / 100
+    exp_width = int((width * percentage) + width)
+    exp_height = int((height * percentage) + height)
+
+    r, g, b = parser.color
+    r = clamp(r, 0, 255)
+    g = clamp(g, 0, 255)
+    b = clamp(b, 0, 255)
+
+    new_img = Image.new("RGB", (exp_width, exp_height), (r, g, b))
+    x = (exp_width // 2) - (width // 2)
+    y = (exp_height // 2) - (height // 2)
+    new_img.paste(image, (x, y))
+    return new_img
+
+
 def resize(image: Image.Image, parser):
     if parser.scale:
         return scale(image, parser.scale)
