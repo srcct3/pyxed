@@ -1,5 +1,5 @@
 from parsearg import get_parser
-from image import load_image
+from image import load_image, save
 from ops.resize import resize, canvas
 from ops.rotate import rotate
 from ops.crop import crop
@@ -16,7 +16,7 @@ def main():
         command(image, parser)
         exit(0)
     image = command(image, parser)
-    image.show()
+    save(image, parser)
 
 
 def get_command(command):

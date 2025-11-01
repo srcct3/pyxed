@@ -151,5 +151,5 @@ def init_parser(
 ):
     parser = subparser.add_parser(name, help=help)
     parser.add_argument("image", help="Path to the image")
-    parser.add_argument("--output", "-o", default=out, help="Path to save edited image")
+    parser.add_argument("--out", "-o", default=out, help="Path to save edited image")
     return parser

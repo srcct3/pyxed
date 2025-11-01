@@ -3,6 +3,13 @@ from typing import Literal, Union
 from PIL import Image, UnidentifiedImageError
 
 
+def save(image: Image.Image, parser):
+    if parser.out is None:
+        filename, ext = os.path.splitext(parser.image)
+        parser.out = f"{filename}_{parser.command}{ext}"
+    image.save(parser.out)
+
+
 def load_image(path: str):
     if not os.path.exists(path):
         print(f"{path} could not be found")
